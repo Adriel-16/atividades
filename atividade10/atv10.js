@@ -1,42 +1,44 @@
-// Adiciona o listener de clique ao botão
-document.getElementById('botao').addEventListener('click', calcularPrimos);
-
-function calcularPrimos() {
-    let primos = 0;
-    let tabelaPrimos = ''; // Variável para armazenar as células da tabela com números primos
-
-    // Limpa o conteúdo atual da tabela de primos
-    document.getElementById('tabela-primos').innerHTML = '';
-
-    // Loop para encontrar números primos entre 2 e 200
-    for (let dividendo = 2; dividendo <= 200; dividendo++) {
-        let primo = true;
-
-        // Verificação se o número é primo
-        for (let dividido = 2; dividido <= Math.sqrt(dividendo); dividido++) {
-            if (dividendo % dividido === 0 && dividido !== dividendo) {
-                primo = false;
-                break;
-            }
+function gerarTabelaNumerosPrimos() {
+    var tabelaHTML = "<table><tr><th colspan='50'>Números Primos entre 0 e 200</th></tr><tr><td>1";
+    var primosEncontrados = 0;
+  
+    for (var dividendo = 2; dividendo <= 200; dividendo++) {
+      var ehPrimo = true;
+      for (var divisor = 2; divisor < dividendo; divisor++) {
+        if (dividendo % divisor == 0) {
+          ehPrimo = false;
+          tabelaHTML += "<td>" + dividendo;
+          break;
         }
-
-        // Se o número for primo, adiciona à variável tabelaPrimos
-        if (primo) {
-            tabelaPrimos += `<td style="background-color: #00FF00;">${dividendo}</td>`;
-            primos++;
-        } else {
-            tabelaPrimos += `<td>${dividendo}</td>`;
-        }
-
-        // Adiciona uma nova linha a cada 20 números
-        if (dividendo % 20 === 0) {
-            tabelaPrimos += '</tr><tr>';
-        }
+      }
+  
+      if (ehPrimo) { 
+        tabelaHTML += "<td bgcolor='#bc57ff'>" + dividendo;
+        primosEncontrados++;
+      }
+  
+      if (dividendo % 20 == 0) {
+        tabelaHTML += "</tr><tr>";
+      }
     }
-
-    // Atualiza o conteúdo da tabela com os números primos
-    document.getElementById('tabela-primos').innerHTML = `<tr>${tabelaPrimos}</tr>`;
-
-    // Atualiza o número de primos encontrados
-    document.getElementById('numeros').textContent = `Número de primos encontrados: ${primos}`;
-}
+  
+    tabelaHTML += "</tr></table>";
+  
+    return tabelaHTML;
+  }
+  
+  // Função para inserir a tabela gerada no documento
+  function inserirTabelaNoDocumento() {
+    var divTabela = document.getElementById('tabelaPrimos');
+    divTabela.innerHTML = gerarTabelaNumerosPrimos();
+  
+    // Mostrar o número de primos encontrados
+    var primosEncontrados = document.querySelectorAll('#tabelaPrimos td[bgcolor="#bc57ff"]').length;
+    divTabela.innerHTML += 'Primos encontrados: ' + primosEncontrados + '<br>';
+  }
+  
+  // Chamando a função para inserir a tabela quando o documento estiver pronto
+  document.addEventListener('DOMContentLoaded', function() {
+    inserirTabelaNoDocumento();
+  });
+  
